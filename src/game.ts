@@ -1,26 +1,37 @@
 import "phaser";
 
-export default class Demo extends Phaser.Scene {
+const getPokemonNumber = () => {
+  const TOTAL_NUM_POKEMON = 807;
+  const pokeNum = Math.ceil(TOTAL_NUM_POKEMON * Math.random());
+  return String(pokeNum).padStart(3, "0");
+}
+
+export default class PokemonHomeScene extends Phaser.Scene {
   constructor() {
-    super("demo");
+    super("pokemonhomescene");
   }
 
   preload() {
     this.load.glsl("stars", "assets/starfields.glsl.js");
-    this.load.image("bulbasaur", "assets/pokemon/thumbnails/001.png");
-    this.load.image("ivysaur", "assets/pokemon/thumbnails/002.png");
-    this.load.image("venusaur", "assets/pokemon/thumbnails/003.png");
+
+    const pokemonOneNum = getPokemonNumber();
+    const pokemonTwoNum = getPokemonNumber();
+    const pokemonThreeNum = getPokemonNumber();
+
+    this.load.image("pokemonOne", `assets/pokemon/thumbnails/${pokemonOneNum}.png`);
+    this.load.image("pokemonTwo", `assets/pokemon/thumbnails/${pokemonTwoNum}.png`);
+    this.load.image("pokemonThree", `assets/pokemon/thumbnails/${pokemonThreeNum}.png`);
   }
 
   create() {
     this.add.shader("RGB Shift Field", 0, 0, 800, 600).setOrigin(0);
 
-    const bulbasaurImage = this.add.image(200, 50, "bulbasaur");
-    const ivysaurImage = this.add.image(400, 50, "ivysaur");
-    const venusaurImage = this.add.image(600, 50, "venusaur");
+    const pokemonOneImage = this.add.image(200, 100, "pokemonOne");
+    const pokemonTwoImage = this.add.image(400, 100, "pokemonTwo");
+    const pokemonThreeImage = this.add.image(600, 100, "pokemonThree");
 
     this.tweens.add({
-      targets: bulbasaurImage,
+      targets: pokemonOneImage,
       y: 500,
       duration: 1500,
       ease: "Sine.inOut",
@@ -29,7 +40,7 @@ export default class Demo extends Phaser.Scene {
     });
 
     this.tweens.add({
-      targets: venusaurImage,
+      targets: pokemonThreeImage,
       y: 500,
       duration: 1500,
       ease: "Sine.inOut",
@@ -38,7 +49,7 @@ export default class Demo extends Phaser.Scene {
     });
 
     this.tweens.add({
-      targets: ivysaurImage,
+      targets: pokemonTwoImage,
       y: 500,
       duration: 1500,
       ease: "Sine.inOut",
@@ -53,7 +64,7 @@ const config = {
   backgroundColor: "#125555",
   width: 800,
   height: 600,
-  scene: Demo,
+  scene: PokemonHomeScene,
 };
 
 const game = new Phaser.Game(config);

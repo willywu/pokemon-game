@@ -22,6 +22,10 @@ by default).
 
 ## Pokemon assets
 
-All Pokemon assets come from https://github.com/HybridShivam/Pokemon and
-are copyrighted by the Pokémon Company and its affiliates.  Our "thumbnails"
-directory is the "thumbnails-compressed" directory of the above repo.
+Pokemon assets and information come from the follow repositories:
+- https://github.com/HybridShivam/Pokemon
+  - our "thumbnails" directory is the "thumbnails-compressed" directory of the above repo
+- https://github.com/fanzeyi/pokemon.json
+  - We use many of the json files from this repository
+
+All Pokemon-related content is copyrighted by the Pokémon Company and its affiliates
