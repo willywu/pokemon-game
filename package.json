@@ -10,6 +10,8 @@
     "author": "Preston & Willy Wu <wu62086@gmail.com>",
     "license": "MIT",
     "dependencies": {
+        "minimist": "^1.2.6",
+        "path-parse": "^1.0.7",
         "prettier": "^2.6.2"
     },
     "devDependencies": {
