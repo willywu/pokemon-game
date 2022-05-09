@@ -4,7 +4,7 @@ const getPokemonNumber = () => {
   const TOTAL_NUM_POKEMON = 807;
   const pokeNum = Math.ceil(TOTAL_NUM_POKEMON * Math.random());
   return String(pokeNum).padStart(3, "0");
-}
+};
 
 export default class PokemonHomeScene extends Phaser.Scene {
   constructor() {
