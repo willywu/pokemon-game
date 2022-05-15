@@ -82,14 +82,18 @@ export default class PokemonHomeScene extends Phaser.Scene {
 
     const pokemonOneImage = this.add.image(400, 100, "pokemonOne");
 
+    const addTextToButton = (button, text) => {
+      this.add.text(button.x - 40, button.y - 10, text, {});
+    };
+
     const buttonOneImage = this.add.image(200, 380, "button");
-    const pokeOneNameLabel = this.add.text(200, 380, pokemonOne.name.english, {});
+    addTextToButton(buttonOneImage, pokemonOne.name.english);
     const buttonTwoImage = this.add.image(600, 380, "button");
-    const pokeTwoNameLabel = this.add.text(600, 380, pokemonTwo.name.english, {});
+    addTextToButton(buttonTwoImage, pokemonTwo.name.english);
     const buttonThreeImage = this.add.image(200, 500, "button");
-    const pokeThreeNameLabel = this.add.text(200, 500, pokemonThree.name.english, {});
+    addTextToButton(buttonThreeImage, pokemonThree.name.english);
     const buttonFourImage = this.add.image(600, 500, "button");
-    const pokeFourNameLabel = this.add.text(600, 500, pokemonFour.name.english, {});
+    addTextToButton(buttonFourImage, pokemonFour.name.english);
 
     this.tweens.add({
       targets: pokemonOneImage,
