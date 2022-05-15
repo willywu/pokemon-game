@@ -2,11 +2,23 @@ import "phaser";
 
 const getPokemonNumber = () => {
   const TOTAL_NUM_POKEMON = 807;
-  const pokeNum = Math.ceil(TOTAL_NUM_POKEMON * Math.random());
+  return Math.ceil(TOTAL_NUM_POKEMON * Math.random());
+};
+
+const getPokemonPaddedNumber = (pokeNum) => {
   return String(pokeNum).padStart(3, "0");
 };
 
+const loadPokemonMetadata = (pokedex, pokeNum) => {
+  // Returns data about the pokemon with give pokeNum
+  // Since the pokedex is "index 0"-based, we need to
+  // look in the pokedex with pokeNum - 1
+  return pokedex[pokeNum - 1];
+};
+
 export default class PokemonHomeScene extends Phaser.Scene {
+  localData = {};
+
   constructor() {
     super("pokemonhomescene");
   }
@@ -14,17 +26,47 @@ export default class PokemonHomeScene extends Phaser.Scene {
   preload() {
     this.load.glsl("stars", "assets/starfields.glsl.js");
 
-    const pokemonOneNum = getPokemonNumber();
-    const pokemonTwoNum = getPokemonNumber();
-    const pokemonThreeNum = getPokemonNumber();
+    this.localData = {};
+    this.localData["pokemonOneNum"] = getPokemonNumber();
+    this.localData["pokemonTwoNum"] = getPokemonNumber();
+    this.localData["pokemonThreeNum"] = getPokemonNumber();
 
-    this.load.image("pokemonOne", `assets/pokemon/thumbnails/${pokemonOneNum}.png`);
-    this.load.image("pokemonTwo", `assets/pokemon/thumbnails/${pokemonTwoNum}.png`);
-    this.load.image("pokemonThree", `assets/pokemon/thumbnails/${pokemonThreeNum}.png`);
+    this.load.image(
+      "pokemonOne",
+      `assets/pokemon/thumbnails/${getPokemonPaddedNumber(this.localData["pokemonOneNum"])}.png`
+    );
+    this.load.image(
+      "pokemonTwo",
+      `assets/pokemon/thumbnails/${getPokemonPaddedNumber(this.localData["pokemonTwoNum"])}.png`
+    );
+    this.load.image(
+      "pokemonThree",
+      `assets/pokemon/thumbnails/${getPokemonPaddedNumber(this.localData["pokemonThreeNum"])}.png`
+    );
+
+    this.load.json("pokedex", "data/pokedex.json");
   }
 
   create() {
     this.add.shader("RGB Shift Field", 0, 0, 800, 600).setOrigin(0);
+
+    const pokedex = this.cache.json.get("pokedex");
+
+    var pokemonOneNum = this.localData["pokemonOneNum"];
+    var pokemonTwoNum = this.localData["pokemonTwoNum"];
+    var pokemonThreeNum = this.localData["pokemonThreeNum"];
+
+    const pokemonOne = loadPokemonMetadata(pokedex, pokemonOneNum);
+    console.log(pokemonOneNum);
+    console.log(pokemonOne.name.english);
+
+    const pokemonTwo = loadPokemonMetadata(pokedex, pokemonTwoNum);
+    console.log(pokemonTwoNum);
+    console.log(pokemonTwo.name.english);
+
+    const pokemonThree = loadPokemonMetadata(pokedex, pokemonThreeNum);
+    console.log(pokemonThreeNum);
+    console.log(pokemonThree.name.english);
 
     const pokemonOneImage = this.add.image(200, 100, "pokemonOne");
     const pokemonTwoImage = this.add.image(400, 100, "pokemonTwo");
@@ -32,7 +74,7 @@ export default class PokemonHomeScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: pokemonOneImage,
-      y: 500,
+      y: 200,
       duration: 1500,
       ease: "Sine.inOut",
       yoyo: true,
@@ -41,7 +83,7 @@ export default class PokemonHomeScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: pokemonThreeImage,
-      y: 500,
+      y: 200,
       duration: 1500,
       ease: "Sine.inOut",
       yoyo: true,
@@ -50,7 +92,7 @@ export default class PokemonHomeScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: pokemonTwoImage,
-      y: 500,
+      y: 200,
       duration: 1500,
       ease: "Sine.inOut",
       yoyo: true,

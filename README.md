@@ -29,3 +29,7 @@ Pokemon assets and information come from the follow repositories:
   - We use many of the json files from this repository
 
 All Pokemon-related content is copyrighted by the Pokémon Company and its affiliates
+
+# Code Examples
+
+We can use https://phaser.io/examples/v3/search to search for code snippets & examples
