@@ -1,8 +1,18 @@
+import _ from "lodash-es";
 import "phaser";
 
-const getPokemonNumber = () => {
+const getPokemonNumbers = () => {
   const TOTAL_NUM_POKEMON = 807;
-  return Math.ceil(TOTAL_NUM_POKEMON * Math.random());
+  // a list of numbers, from 1 to the total number of pokemon
+  let allNumbers = _.range(1, TOTAL_NUM_POKEMON + 1);
+  let pokemonNumbers = [];
+  for (let i = 0; i < 4; i++) {
+    // pop a random element from the list of numbers
+    let allNumsPosition = Math.floor(allNumbers.length * Math.random());
+    let pokemonNumber = allNumbers.splice(allNumsPosition, 1)[0];
+    pokemonNumbers.push(pokemonNumber);
+  }
+  return pokemonNumbers;
 };
 
 const getPokemonPaddedNumber = (pokeNum) => {
@@ -27,10 +37,12 @@ export default class PokemonHomeScene extends Phaser.Scene {
     this.registry.set("width", this.game.config.width);
     this.registry.set("height", this.game.config.height);
 
-    this.registry.set("pokemonOneNum", getPokemonNumber());
-    this.registry.set("pokemonTwoNum", getPokemonNumber());
-    this.registry.set("pokemonThreeNum", getPokemonNumber());
-    this.registry.set("pokemonFourNum", getPokemonNumber());
+    const pokemonNumbers = getPokemonNumbers();
+
+    this.registry.set("pokemonOneNum", pokemonNumbers[0]);
+    this.registry.set("pokemonTwoNum", pokemonNumbers[1]);
+    this.registry.set("pokemonThreeNum", pokemonNumbers[2]);
+    this.registry.set("pokemonFourNum", pokemonNumbers[3]);
 
     this.load.image(
       "pokemonOne",
@@ -88,18 +100,18 @@ export default class PokemonHomeScene extends Phaser.Scene {
       this.add.text(button.x - 40, button.y - 10, text, {});
     };
 
-    const buttonOneImage = this.add.image(240, 440, "button");
+    const buttonOneImage = this.add.image(240, 400, "button");
     addTextToButton(buttonOneImage, pokemonOne.name.english);
-    const buttonTwoImage = this.add.image(240, 560, "button");
+    const buttonTwoImage = this.add.image(240, 520, "button");
     addTextToButton(buttonTwoImage, pokemonTwo.name.english);
-    const buttonThreeImage = this.add.image(240, 680, "button");
+    const buttonThreeImage = this.add.image(240, 640, "button");
     addTextToButton(buttonThreeImage, pokemonThree.name.english);
-    const buttonFourImage = this.add.image(240, 800, "button");
+    const buttonFourImage = this.add.image(240, 760, "button");
     addTextToButton(buttonFourImage, pokemonFour.name.english);
 
     this.tweens.add({
       targets: pokemonOneImage,
-      y: 200,
+      y: 250,
       duration: 1500,
       ease: "Sine.inOut",
       yoyo: true,
@@ -121,7 +133,7 @@ const config = {
   height: 900,
   scale: {
     mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
   },
   scene: PokemonHomeScene,
 };
