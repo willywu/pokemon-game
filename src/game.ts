@@ -61,7 +61,8 @@ export default class PokemonHomeScene extends Phaser.Scene {
       `assets/pokemon/thumbnails/${getPokemonPaddedNumber(this.registry.get("pokemonFourNum"))}.png`
     );
     this.load.image("button", "assets/button.png");
-    this.load.image("button-down", "assets/button-down.png");
+    this.load.image("button-correct", "assets/button-correct.png");
+    this.load.image("button-incorrect", "assets/button-incorrect.png");
 
     this.load.json("pokedex", "data/pokedex.json");
   }
@@ -94,23 +95,41 @@ export default class PokemonHomeScene extends Phaser.Scene {
     console.log(pokemonFourNum);
     console.log(pokemonFour.name.english);
 
-    const pokemonOneImage = this.add.image(240, 100, "pokemonOne");
+    const allPokemon = ["pokemonOne", "pokemonTwo", "pokemonThree", "pokemonFour"];
+    const chosenPokemonNum = Math.floor(Math.random() * allPokemon.length);
+    const chosenPokemon = allPokemon[chosenPokemonNum];
+    const chosenPokemonImage = this.add.image(240, 100, chosenPokemon);
+
+    const addButton = (x, y, thisPokemonNum, chosenPokemonNum) => {
+      let sprite = this.add.sprite(x, y, "button").setInteractive();
+      sprite.on("pointerdown", () => {
+        if (thisPokemonNum === chosenPokemonNum) {
+          sprite.setTexture("button-correct");
+        } else {
+          sprite.setTexture("button-incorrect");
+        }
+      });
+      sprite.on("pointerup", () => {
+        sprite.setTexture("button");
+      });
+      return sprite;
+    };
 
     const addTextToButton = (button, text) => {
       this.add.text(button.x - 40, button.y - 10, text, {});
     };
 
-    const buttonOneImage = this.add.image(240, 400, "button");
+    const buttonOneImage = addButton(240, 400, 0, chosenPokemonNum);
     addTextToButton(buttonOneImage, pokemonOne.name.english);
-    const buttonTwoImage = this.add.image(240, 520, "button");
+    const buttonTwoImage = addButton(240, 520, 1, chosenPokemonNum);
     addTextToButton(buttonTwoImage, pokemonTwo.name.english);
-    const buttonThreeImage = this.add.image(240, 640, "button");
+    const buttonThreeImage = addButton(240, 640, 2, chosenPokemonNum);
     addTextToButton(buttonThreeImage, pokemonThree.name.english);
-    const buttonFourImage = this.add.image(240, 760, "button");
+    const buttonFourImage = addButton(240, 760, 3, chosenPokemonNum);
     addTextToButton(buttonFourImage, pokemonFour.name.english);
 
     this.tweens.add({
-      targets: pokemonOneImage,
+      targets: chosenPokemonImage,
       y: 250,
       duration: 1500,
       ease: "Sine.inOut",
