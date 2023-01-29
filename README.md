@@ -33,3 +33,11 @@ All Pokemon-related content is copyrighted by the Pokémon Company and its affil
 # Code Examples
 
 We can use https://phaser.io/examples/v3/search to search for code snippets & examples
+
+# Deployment
+
+When code is committed to master, it is automatically deployed to https://willywu-pokemon-game.netlify.app/
+
+# Style
+
+Follow https://google.github.io/styleguide/tsguide.html for style, as much as is practical

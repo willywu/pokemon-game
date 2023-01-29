@@ -1,7 +1,13 @@
 import _ from "lodash-es";
 import "phaser";
 
-const getPokemonNumbers = () => {
+const WIDTH: number = 480;
+const HEIGHT: number = 900;
+
+/**
+ * @returns a list of 4 random pokemon numbers
+ */
+const getPokemonNumbers = (): number[] => {
   const TOTAL_NUM_POKEMON = 807;
   // a list of numbers, from 1 to the total number of pokemon
   let allNumbers = _.range(1, TOTAL_NUM_POKEMON + 1);
@@ -15,14 +21,20 @@ const getPokemonNumbers = () => {
   return pokemonNumbers;
 };
 
-const getPokemonPaddedNumber = (pokeNum) => {
+/**
+ * @returns a string of the passed-in pokemon number, left-padded with 0s.
+ *        This is to help load the filenames of the pokemon images
+ */
+const getPokemonPaddedNumber = (pokeNum: number): string => {
   return String(pokeNum).padStart(3, "0");
 };
 
-const loadPokemonData = (pokedex, pokeNum) => {
-  // Returns data about the pokemon with give pokeNum
-  // Since the pokedex is "index 0"-based, we need to
-  // look in the pokedex with pokeNum - 1
+/**
+ * @returns data about the pokemon with given pokeNum.
+ *         Since the pokedex is "index 0"-based, we need to
+ *         look in the pokedex with pokeNum - 1
+ */
+const loadPokemonData = (pokedex: object, pokeNum: number) => {
   return pokedex[pokeNum - 1];
 };
 
@@ -34,10 +46,7 @@ export default class PokemonHomeScene extends Phaser.Scene {
   preload() {
     this.load.glsl("stars", "assets/starfields.glsl.js");
 
-    this.registry.set("width", this.game.config.width);
-    this.registry.set("height", this.game.config.height);
-
-    const pokemonNumbers = getPokemonNumbers();
+    const pokemonNumbers: number[] = getPokemonNumbers();
 
     this.registry.set("pokemonOneNum", pokemonNumbers[0]);
     this.registry.set("pokemonTwoNum", pokemonNumbers[1]);
@@ -72,7 +81,7 @@ export default class PokemonHomeScene extends Phaser.Scene {
       .shader("RGB Shift Field", 0, 0, Number(this.game.config.width), Number(this.game.config.height))
       .setOrigin(0);
 
-    const pokedex = this.cache.json.get("pokedex");
+    const pokedex: object = this.cache.json.get("pokedex");
 
     var pokemonOneNum = this.registry.get("pokemonOneNum");
     var pokemonTwoNum = this.registry.get("pokemonTwoNum");
@@ -98,9 +107,9 @@ export default class PokemonHomeScene extends Phaser.Scene {
     const allPokemon = ["pokemonOne", "pokemonTwo", "pokemonThree", "pokemonFour"];
     const chosenPokemonNum = Math.floor(Math.random() * allPokemon.length);
     const chosenPokemon = allPokemon[chosenPokemonNum];
-    const chosenPokemonImage = this.add.image(240, 100, chosenPokemon);
+    const chosenPokemonImage = this.add.image(0.5 * WIDTH, 0.12 * HEIGHT, chosenPokemon);
 
-    const addButton = (x, y, thisPokemonNum, chosenPokemonNum) => {
+    const addButton = (x: number, y: number, thisPokemonNum: number, chosenPokemonNum: number) => {
       let sprite = this.add.sprite(x, y, "button").setInteractive();
       sprite.on("pointerdown", () => {
         if (thisPokemonNum === chosenPokemonNum) {
@@ -119,13 +128,16 @@ export default class PokemonHomeScene extends Phaser.Scene {
       this.add.text(button.x - 40, button.y - 10, text, {});
     };
 
-    const buttonOneImage = addButton(240, 400, 0, chosenPokemonNum);
+    const buttonSpacing = 0.14 * HEIGHT;
+    const buttonOneHeight = 0.46 * HEIGHT;
+
+    const buttonOneImage = addButton(0.5 * WIDTH, buttonOneHeight, 0, chosenPokemonNum);
     addTextToButton(buttonOneImage, pokemonOne.name.english);
-    const buttonTwoImage = addButton(240, 520, 1, chosenPokemonNum);
+    const buttonTwoImage = addButton(0.5 * WIDTH, buttonOneHeight + buttonSpacing, 1, chosenPokemonNum);
     addTextToButton(buttonTwoImage, pokemonTwo.name.english);
-    const buttonThreeImage = addButton(240, 640, 2, chosenPokemonNum);
+    const buttonThreeImage = addButton(0.5 * WIDTH, buttonOneHeight + 2 * buttonSpacing, 2, chosenPokemonNum);
     addTextToButton(buttonThreeImage, pokemonThree.name.english);
-    const buttonFourImage = addButton(240, 760, 3, chosenPokemonNum);
+    const buttonFourImage = addButton(0.5 * WIDTH, buttonOneHeight + 3 * buttonSpacing, 3, chosenPokemonNum);
     addTextToButton(buttonFourImage, pokemonFour.name.english);
 
     this.tweens.add({
@@ -148,8 +160,8 @@ export default class PokemonHomeScene extends Phaser.Scene {
 const config = {
   type: Phaser.AUTO,
   backgroundColor: "#125555",
-  width: 480,
-  height: 900,
+  width: WIDTH,
+  height: HEIGHT,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
