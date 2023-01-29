@@ -76,10 +76,24 @@ export default class PokemonHomeScene extends Phaser.Scene {
     this.load.json("pokedex", "data/pokedex.json");
   }
 
+  getTime = () => {
+    return (this.game.getTime() / 1000).toFixed(2);
+  };
+
+  /**
+   * Add time elements, like the timer
+   */
+  addTimeElements = () => {
+    let timeDisplay = this.add.text(0.4 * WIDTH, 0.04 * HEIGHT, "Time: " + this.getTime());
+    this.registry.set("timeDisplay", timeDisplay);
+  };
+
   create() {
     this.add
       .shader("RGB Shift Field", 0, 0, Number(this.game.config.width), Number(this.game.config.height))
       .setOrigin(0);
+
+    this.addTimeElements();
 
     const pokedex: object = this.cache.json.get("pokedex");
 
@@ -150,10 +164,9 @@ export default class PokemonHomeScene extends Phaser.Scene {
     });
   }
 
-  update() {
+  update(time, delta) {
     var pointer = this.input.activePointer;
-
-    pointer;
+    this.registry.get("timeDisplay").setText("Time: " + this.getTime());
   }
 }
 
